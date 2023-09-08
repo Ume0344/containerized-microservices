@@ -14,27 +14,26 @@ pipeline {
                 sh 'go version'
                 sh 'go get -u golang.org/x/lint/golint'
             }
-
         }
         stage('build') {
             steps {
                 echo "Compiling and building"
-                sh 'go build'
+                sh 'go build ./...'
             } 
         }
         stage('Test') {
             steps {
+                echo "Unit Testing"
+                sh 'go test -cover ./...'
+
+                echo "Vetting"
+                sh 'go vet ./...'
+
                 echo "Linting"
                 sh 'golint ./...'
 
                 echo "Formatting"
                 sh 'gofmt -s -w .'
-
-                echo "Vetting"
-                sh 'go vet ./...'
-
-                echo "Unit Testing"
-                sh 'go test -cover ./...'
             }
         }
     }
