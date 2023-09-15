@@ -12,7 +12,13 @@ pipeline {
             steps {
                 echo "Installing dependencies to run go code"
                 sh 'go version'
-                sh 'go get -u golang.org/x/lint/golint'
+
+                dir('microservice1') {
+                    sh 'go get -u golang.org/x/lint/golint'
+                }
+                dir('microservice2') {
+                    sh 'go get -u golang.org/x/lint/golint'
+                }
 
                 echo "Checking docker version"
                 sh 'docker version'
