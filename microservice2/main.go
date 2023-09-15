@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	microservice2()
+	go microservice2()
 }
