@@ -13,9 +13,12 @@ pipeline {
                 echo "Installing dependencies to run go code"
                 sh 'go version'
                 sh 'go get -u golang.org/x/lint/golint'
+
+                echo "Checking docker version"
+                sh 'docker version'
             }
         }
-        stage('build') {
+        stage('Build') {
             steps {
                 echo "Compiling and building"
                 sh 'go build ./...'
@@ -34,6 +37,16 @@ pipeline {
 
                 echo "Formatting"
                 sh 'gofmt -s -w .'
+            }
+        }
+        stage('Create Docker Images') {
+            steps {
+
+                echo "Creating docker image for microservice1"
+                sh 'docker build -tag microservice1 ./microservice1/'
+
+                echo "Creating docker image for microservice2"
+                sh 'docker build -tag microservice2 ./microservice2/'
             }
         }
     }
