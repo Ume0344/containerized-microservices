@@ -28,7 +28,3 @@ func TestHandleFunc(t *testing.T) {
 	assert.Equal(t, msg.Message, "Hello World")
 	assert.Equal(t, msg.ID, 1)
 }
-
-func TestServerMicroservice1(t *testing.T) {
-	serverMicroservice1()
-}

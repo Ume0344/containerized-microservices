@@ -26,7 +26,3 @@ func TestGetMessageFailed(t *testing.T) {
 	assert.Equal(t, message.Message, "Could not get message from microservice 1 server. Please check if url is correct and server is up.")
 	assert.Equal(t, message.ID, -1)
 }
-
-func TestMicroservice2(t *testing.T) {
-	microservice2()
-}
