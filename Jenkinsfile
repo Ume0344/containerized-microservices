@@ -12,28 +12,56 @@ pipeline {
             steps {
                 echo "Installing dependencies to run go code"
                 sh 'go version'
-                sh 'go get -u golang.org/x/lint/golint'
+
+                dir('microservice1') {
+                    sh 'go get -u golang.org/x/lint/golint'
+                }
+                dir('microservice2') {
+                    sh 'go get -u golang.org/x/lint/golint'
+                }
+
+                echo "Checking docker version"
+                sh 'docker version'
             }
         }
-        stage('build') {
+        stage('Build') {
             steps {
                 echo "Compiling and building"
-                sh 'go build ./...'
+                dir('microservice1') {
+                    sh 'go build .'
+                }
+                dir('microservice2') {
+                    sh 'go build .'
+                }
             } 
         }
         stage('Test') {
             steps {
-                echo "Unit Testing"
-                sh 'go test -cover ./...'
+                echo "Unit Testing, Vetting, Linting, Formatting for microservice1"
+                dir('microservice1') {
+                    sh 'go test -cover .'
+                    sh 'go vet .'
+                    sh 'golint .'
+                    sh 'gofmt -s -w .'
+                }
 
-                echo "Vetting"
-                sh 'go vet ./...'
-
-                echo "Linting"
-                sh 'golint ./...'
-
-                echo "Formatting"
-                sh 'gofmt -s -w .'
+                echo "Unit Testing, Vetting, Linting, Formatting for microservice2"
+                dir('microservice2') {
+                    sh 'go test -cover .'
+                    sh 'go vet .'
+                    sh 'golint .'
+                    sh 'gofmt -s -w .'
+                }
+            }
+        }
+        stage('Create Docker Images') {
+            steps {
+                dir('microservice1') {
+                    sh 'docker build -t microservice1 .'
+                }
+                dir('microservice2') {
+                    sh 'docker build -t microservice2 .'
+                }
             }
         }
     }
