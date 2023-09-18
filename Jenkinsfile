@@ -57,10 +57,10 @@ pipeline {
         stage('Create Docker Images') {
             steps {
                 dir('microservice1') {
-                    sh 'docker build -tag microservice1 .'
+                    sh 'docker build -t microservice1 .'
                 }
                 dir('microservice2') {
-                    sh 'docker build -tag microservice2 .'
+                    sh 'docker build -t microservice2 .'
                 }
             }
         }
