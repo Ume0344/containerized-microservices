@@ -27,32 +27,41 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Compiling and building"
-                sh 'go build ./...'
+                dir('microservice1') {
+                    sh 'go build .'
+                }
+                dir('microservice2') {
+                    sh 'go build .'
+                }
             } 
         }
         stage('Test') {
             steps {
-                echo "Unit Testing"
-                sh 'go test -cover ./...'
+                echo "Unit Testing, Vetting, Linting, Formatting for microservice1"
+                dir('microservice1') {
+                    sh 'go test -cover .'
+                    sh 'go vet .'
+                    sh 'golint .'
+                    sh 'gofmt -s -w .'
+                }
 
-                echo "Vetting"
-                sh 'go vet ./...'
-
-                echo "Linting"
-                sh 'golint ./...'
-
-                echo "Formatting"
-                sh 'gofmt -s -w .'
+                echo "Unit Testing, Vetting, Linting, Formatting for microservice2"
+                dir('microservice2') {
+                    sh 'go test -cover .'
+                    sh 'go vet .'
+                    sh 'golint .'
+                    sh 'gofmt -s -w .'
+                }
             }
         }
         stage('Create Docker Images') {
             steps {
-
-                echo "Creating docker image for microservice1"
-                sh 'docker build -tag microservice1 ./microservice1/'
-
-                echo "Creating docker image for microservice2"
-                sh 'docker build -tag microservice2 ./microservice2/'
+                dir('microservice1') {
+                    sh 'docker build -tag microservice1 .'
+                }
+                dir('microservice2') {
+                    sh 'docker build -tag microservice2 .'
+                }
             }
         }
     }
