@@ -4,6 +4,9 @@ pipeline {
         go 'go1.20'
     }
 
+    environment {
+        registryCredentials = 'dockerhubId'
+    }
     parameters {
         string(name : 'RECIPIENTS', defaultValue: 'uhabiba005@gmail.com', description: 'Email address of recipient')
     }
@@ -33,7 +36,7 @@ pipeline {
                 dir('microservice2') {
                     sh 'go build .'
                 }
-            } 
+            }
         }
         stage('Test') {
             steps {
@@ -54,13 +57,23 @@ pipeline {
                 }
             }
         }
-        stage('Create Docker Images') {
+        stage('Create and Push Docker Images') {
             steps {
                 dir('microservice1') {
-                    sh 'docker build -t microservice1 .'
+                    script{
+                        docker.withRegistry('', registryCredentials) {
+                            def microservice1Image = docker.build("umehabiba04/microservice1:${env.BUILD_ID}")
+                            microservice1Image.push()
+                        }
+                    }
                 }
                 dir('microservice2') {
-                    sh 'docker build -t microservice2 .'
+                    script{
+                        docker.withRegistry('', registryCredentials) {
+                            def microservice2Image = docker.build("umehabiba04/microservice2:${env.BUILD_ID}")
+                            microservice2Image.push()
+                        }
+                    }
                 }
             }
         }
