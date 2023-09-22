@@ -5,6 +5,7 @@ pipeline {
     }
 
     environment {
+        // dockerhubId is the credential name created in Jenkins UI
         registryCredentials = 'dockerhubId'
     }
     parameters {
