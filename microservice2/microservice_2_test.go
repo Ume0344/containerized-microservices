@@ -20,7 +20,7 @@ func TestGetMessageSuccessful(t *testing.T) {
 }
 
 func TestGetMessageFailed(t *testing.T) {
-	url := "http://localhost/:5001"
+	url := "http://localhost:5001"
 	message := getMessage(url)
 
 	assert.Equal(t, message.Message, "Could not get message from microservice 1 server. Please check if url is correct and server is up.")
