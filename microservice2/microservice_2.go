@@ -45,7 +45,7 @@ func getMessage(url string) (message responseMessage) {
 // microservice2 requests microservice1 to get message and
 // reverse it.
 func microservice2() {
-	microservice1Url := "http://microservice1-service.default.svc.cluster.local/"
+	microservice1Url := "http://microservice1-service.microservices.svc.cluster.local/"
 	message := getMessage(microservice1Url)
 
 	log.Printf("Received Message from microservice 1 server: %s\n", message.Message)
