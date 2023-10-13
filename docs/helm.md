@@ -25,3 +25,8 @@ helm install --values=values1.yaml <chartname>
 ```
 helm install --set version=2.1
 ```
+
+## Helm Installation
+- Donwload the [suitable release](https://github.com/helm/helm/releases)
+- Unpack it (`tar -zxvf helm-v3.13.1-linux-amd64.tar.gz`)
+- `mv linux-amd64/helm /usr/local/bin/helm`
