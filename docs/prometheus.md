@@ -24,3 +24,9 @@ helm install prometheus prometheus-community/kube-prometheus-stack
 ```
 Check all the relevant pods are running `kubectl get pods | grep prometheus`
 
+- To access the grafana GUI on localhost,`kubectl port-forward <prometheus-grafana-846764567d-m2bf9(prometheus-grafana pod)> 3000`
+- To get the credentials of grafana;
+```
+kubectl get secret prometheus-grafana -o jsonpath='{.data}' | python3 -c "import sys, json; print(json.load(sys.stdin)['admin-password'])" | base64 --decode
+kubectl get secret prometheus-grafana -o jsonpath={.data.admin-password} | base64 --decode
+```
